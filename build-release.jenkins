@@ -14,7 +14,6 @@ node('docker-based-builds') {
     stage('Log Tool Versions') {
       sh 'java -version'
       sh 'git --version'
-      sh 'mvn --version'
       sh 'gpg --version'
     }
 
@@ -28,12 +27,10 @@ node('docker-based-builds') {
         // credentials for the GPG certificates are stored in Jenkins
         withCredentials([string(credentialsId: 'aqe-gpg-passphrase', variable: 'gpgPassphrase')]) {
 
-          def skipTests = "-DskipTests=true"
-          def gpgPassphrase = "-Dgpg.passphrase=${gpgPassphrase}"
-          def repositoryCredentials = "-Dossrh.username=${ossrhUsername} -Dossrh.password=${ossrhPassword}"
-          def profiles = "-P maven-central"
+          def gpgPassphrase = "-Psigning.password=${gpgPassphrase}"
+          def repositoryCredentials = "-PossrhUsername=${ossrhUsername} -PossrhPassword=${ossrhPassword}"
 
-          sh "mvn clean deploy ${skipTests} ${gpgPassphrase} ${repositoryCredentials} ${profiles}"
+          sh "./gradlew build uploadArchives ${gpgPassphrase} ${repositoryCredentials} ${profiles}"
 
         }
       }

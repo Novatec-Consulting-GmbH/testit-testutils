@@ -8,3 +8,5 @@
 **/.metadata/
 **/target/
 target
+.gradle/
+**/build/

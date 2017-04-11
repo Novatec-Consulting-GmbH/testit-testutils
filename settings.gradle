@@ -1,0 +1,6 @@
+rootProject.name = 'testit-testutils'
+
+include 'testutils-logrecorder'
+include 'testutils-logrecorder-logback'
+include 'testutils-logsuppressor-logback'
+include 'testutils-mockito'
